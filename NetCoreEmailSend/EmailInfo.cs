@@ -67,6 +67,8 @@ namespace NetCoreEmailSend
          
         public string UserName { get; set; }
 
+        public bool UseDefaultCredentials { get; set; }
+
         /// <summary>
         /// 发送邮件超时时间(秒)  
         /// Default:30

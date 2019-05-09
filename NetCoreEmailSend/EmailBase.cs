@@ -17,14 +17,19 @@ namespace NetCoreEmailSend
         {
             this.emailConfig = config;
 
+            InfoSmtpClient();
+        }
+
+
+        private void InfoSmtpClient()
+        {
             SmtpClient = new SmtpClient()
             {
                 Host = emailConfig.Host,
                 Port = emailConfig.Port,
-                EnableSsl = emailConfig.EnableSsl, 
-                Timeout=emailConfig.TimeoutMilliSecond*1000,
-                //UseDefaultCredentials = true,
-                //DeliveryMethod = SmtpDeliveryMethod.Network,
+                EnableSsl = emailConfig.EnableSsl,
+                UseDefaultCredentials = emailConfig.UseDefaultCredentials,
+                Timeout = emailConfig.TimeoutMilliSecond * 1000,
                 Credentials = new NetworkCredential(emailConfig.UserName, emailConfig.Password)
             };
         }
@@ -36,6 +41,9 @@ namespace NetCoreEmailSend
             {
                 using (var mailMessage = new MailMessage())
                 {
+                    if (SmtpClient == null)
+                        InfoSmtpClient();
+
                     mailMessage.From = new MailAddress(info.FromEmail);
                     mailMessage.To.Add(info.ReceiveEmail);
                     mailMessage.Body = info.Body;
